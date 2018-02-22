@@ -127,7 +127,7 @@ apiRoutes.get('/products', (req, res) => {
 //return list of users
 apiRoutes.get('/users', (req, res) => {
 	User.findAll({
-		attributes: ['uname', 'password']
+		attributes: ['uname', 'password', 'access_key', 'secret_key']
 	})
 	.then(user_list => res.status(201).send(user_list))
 	.catch(err => res.status(400).send(err));

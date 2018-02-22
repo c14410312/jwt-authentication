@@ -4,22 +4,22 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
 	queryInterface.addColumn(
 	    	'users',
-	    	'access-key',
+	    	'access_key',
 	    	Sequelize.STRING);
 	queryInterface.addColumn(
 	    	'users',
-	    	'secret-key',
+	    	'secret_key',
 	    	Sequelize.STRING);
   },
 
   down: (queryInterface/*, Sequelize*/) => {
 	queryInterface.removeColumn(
 		'users',
-		'access-key');
+		'access_key');
 	
 	queryInterface.removeColumn(
 		'users',
-		'access-key');
+		'access_key');
 
   },
 };
