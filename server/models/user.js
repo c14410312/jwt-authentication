@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   
 	const users = sequelize.define('users', {
     		uname: DataTypes.STRING,
-    		password: DataTypes.STRING
+    		password: DataTypes.STRING,
   	},{
 		createdAt: false,
 		updatedAt: false
