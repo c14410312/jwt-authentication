@@ -8,6 +8,7 @@ module.exports = (app) => {
 	}));
 	
 	//list all the users
+	app.post('/api/authenticate', userController.auth);
 	app.get('/api/users', userController.list);
 
 	//list all products
