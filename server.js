@@ -22,6 +22,7 @@ app.get('/', function(req, res) {
 	res.send('Hello! The API is at http://localhost:' + port + '/api');
  });
 
+const CryptoJS = require('crypto-js');
 const apiRoutes = express.Router(); 
 
 
@@ -125,12 +126,39 @@ apiRoutes.get('/products', (req, res) => {
 ///////////////////
 
 //return list of users
+//Using HMAC to validate request has came from correct user
 apiRoutes.get('/users', (req, res) => {
-	User.findAll({
-		attributes: ['uname', 'password', 'access_key', 'secret_key']
-	})
-	.then(user_list => res.status(201).send(user_list))
-	.catch(err => res.status(400).send(err));
+
+	User.findOne({
+		where: {
+			access_key: req.headers.access_key,
+		}
+	}).then((user) => {
+		
+		let hash = req.headers.signature;
+		let secret = user.secret_key;
+		let message = req.body.message;
+
+		//decrypt the message:
+		let bytes = CryptoJS.AES.decrypt(hash.toString(), secret);
+		let plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+		if(plaintext == message){
+			User.findAll({
+				attributes: ['uname', 'password', 'access_key', 'secret_key']
+			})
+			.then(user_list => {
+				res.status(201).send(user_list)
+			})
+			.catch((err) => {
+				res.status(400).send(err)
+			});
+			
+		}else{
+			res.status(401).send({message: "decrypted message does not match!"})
+		}
+
+	}).catch(err => res.status(400).send(err));
 });
 
 
